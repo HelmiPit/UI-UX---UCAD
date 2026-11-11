@@ -1,0 +1,40 @@
+/* test.html css */
+
+.box {
+            width: 100px;
+            height: 100px;
+            background-color: aqua;
+            transition: transform 0.5s ease-in;
+        }
+        .box:hover {
+            transform: translateX(300px);
+        }
+        .box2 {
+            width: 100px;
+            height: 100px;
+            background-color: rgb(28, 220, 10);
+            animation-name: movebox;
+            animation-duration: 2s;
+            animation-fill-mode: forwards;
+            animation-iteration-count: 5;
+            animation-timing-function: ease-in;
+            animation-direction: reverse;
+        
+        }
+
+        @keyframes movebox {
+            from {
+                background-color: rgb(234, 48, 209);
+                transform: translateX(0px);
+            }
+            to {
+                background-color: rgb(58, 215, 15);
+                transform: translateX(300px);
+            }
+
+        }
+        .box3 {
+            width: 100px;
+            height: 100px;
+            background-color: yellow;
+        }

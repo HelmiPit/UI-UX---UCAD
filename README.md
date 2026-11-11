@@ -1,3 +1,3 @@
 # UI/UX viikkotehtävät
 
-Jokaisen viikon tehtävät löytyvät omista brancheistaan
+Viikko 4 - Duckhunt Animation & Sprite tehtävä (3p)
