@@ -4,6 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CSS 3D ja Three.js - demo</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://jsdelivr.net",
+          "three/addons/": "https://jsdelivr.net"
+        }
+      }
+    </script>
 
     <style>
       body {
@@ -36,7 +44,12 @@
         height: 100%;
         background-color: blueviolet;
         /* tänne rotaatiot ym transitiot */
+        /* transform: translateZ(100px) rotateY(60deg); */
         transform: rotateY(60deg);
+        /* default: */
+        /* transform-origin: left center; */
+        /* Miten taso näkyy takaa */
+        /* backface-visibility: hidden; */
       }
 
       .flex {
@@ -86,6 +99,11 @@
         color: inherit;
         cursor: pointer;
         font: inherit;
+        transition: transform 1s ease-in-out;
+
+        /* Lapsielementit pysyy keskenään 3D tilassa */
+        /* ns. omat transformaatiot toimivat 3D-tilassa */
+        transform-style: preserve-3d;
       }
 
       .card:focus-visible {
@@ -95,17 +113,29 @@
 
       /* Luokka lisätään ja poistetaan JavaScriptillä. */
       .flipped {
+        transform: rotateY(180deg);
       }
+
       .card:hover {
       }
       .card-front,
       .card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        /* top: 0;
+        left: 0; */
+        inset: 0;
+
       }
 
       .card-front {
+        background-color: blueviolet;
       }
 
       .card-back {
+        background-color: lightblue;
+        transform: rotateY(180deg);
       }
     </style>
 
@@ -141,9 +171,15 @@
         margin: 50px auto;
         display: grid;
         place-items: center;
+        perspective: 600px;
       }
 
       .kuutio {
+        width: 200px;
+        height: 200px;
+        position: relative;
+        transform-style: preserve-3d;
+        transform: rotateY(30deg) rotateX(30deg);
       }
 
       @keyframes rotateCube {
@@ -158,17 +194,34 @@
 
       /* Muunnosten järjestys on tärkeä: rotate + translateZ. */
       .kuutio-etu {
+        background-color: lightpink;
+        width: 200px;
+        height: 200px;
+        position: absolute;
+        inset: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: aliceblue;
+        font-size: xx-large;
       }
       .kuutio-taka {
+        background-color: lightblue;
       }
       .kuutio-oikea {
+        background-color: lightgreen;
       }
       .kuutio-vasen {
+        background-color: lightcoral;
+        transform: translateZ(-100px) rotateY(90deg);
       }
       .kuutio-yla {
+        background-color: lightgoldenrodyellow;
       }
       .kuutio-ala {
+        background-color: lightgray;
       }
+
     </style>
 
     <!-- .maailma3d vastaa aiempaa .scene-elementtiä: kamera/perspektiivi. -->
@@ -239,27 +292,10 @@
       </p>
       <p>
         Eos beatae a dolorem nemo, molestias in perspiciatis distinctio cumque
-        inventore. Error quam exercitationem accusamus iusto id eius,
-        reprehenderit rerum odio aperiam cupiditate itaque cumque facilis modi
-        veritatis quos nisi nam molestiae dolores placeat et dolorum. Aperiam
-        quia et quis ab! Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Cupiditate ipsum veniam, suscipit sint quis at assumenda ea
-        molestiae earum. Eos beatae a dolorem nemo, molestias in perspiciatis
-        distinctio cumque inventore. Cupiditate ipsum veniam, suscipit sint quis
-        at assumenda ea molestiae earum. Eos beatae a dolorem nemo, molestias in
-        perspiciatis distinctio cumque inventore. Error quam exercitationem
-        accusamus iusto id eius, reprehenderit rerum odio aperiam cupiditate
-        itaque cumque facilis modi veritatis quos nisi nam molestiae dolores
-        placeat et dolorum. Aperiam quia et quis ab! Lorem ipsum dolor sit amet,
-        consectetur adipisicing elit. Cupiditate ipsum veniam, suscipit sint
-        quis at assumenda ea molestiae earum. Eos beatae a dolorem nemo,
-        molestias in perspiciatis distinctio cumque inventore.
+        inventore. Error quam exercitationem accusamus iusto id eius.
       </p>
     </div>
 
-    <script>
-      // Kortin click-tapahtuma: JS vain vaihtaa CSS-luokan.
-      const card = document.querySelector(".card");
-    </script>
+    <script type="module" src="three-cube.js"></script>
   </body>
 </html>
