@@ -1,3 +1,3 @@
 # UI/UX viikkotehtävät
 
-Viikko 4 - Web 3D
+Viikko 3 - Scroll Parallax (3p)
