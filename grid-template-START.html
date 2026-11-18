@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grid touhua</title>
+    <style>
+      body {
+        box-sizing: border-box;
+        background-image: linear-gradient(110deg, #ffced9, #95db92);
+        min-height: calc(100vh - 100px);
+        margin: 50px;
+        background-attachment: fixed;
+      }
+
+      .container {
+        border: 1px solid rgb(4, 0, 255);
+        height: 500px;
+        display: grid;
+        /* grid-template-columns: 200px 200px 200px; */
+        /* grid-template-columns: 1fr 1fr 1fr 5fr; */
+        grid-template-columns: [left] 200px repeat(2, 1fr);
+        /* grid-template-columns: 100px 100px 100px; */
+        grid-template-rows: 100px;
+
+        /* AUTOMAATTISESTI LUODUT RIVIT */
+
+        grid-auto-rows: 100px; 
+
+        /* ITEM TASOLLA */
+
+        /* align-items: center; */
+        /* justify-items: center; */
+
+        /* KOKO GRIDI */
+
+        /* justify-content: center; */
+        /* align-content: end; */
+        
+      }
+      .item {
+        border: 4px solid rgb(255, 90, 90);
+        border-radius: 3px;
+        font-size: 30px;
+        padding: 5px;
+        background-color: pink;
+        text-align: center;
+      }
+
+      .item1 {
+        background-color: lightgreen;
+        grid-column: 1 / -1;
+        grid-row: 1 / 2;
+      }
+
+      /* .item5 {
+        align-self: end;
+
+      } */
+
+      .item5 {
+        background-color: lightskyblue;
+        /* grid-column-start: 2;
+        grid-column-end: 4; */
+        grid-column: 2 / 4;
+       /*  grid-row-start: 1; 
+        grid-row-end: 2; */
+        grid-row: 2 / 4;
+        /* grid-area: row-start / column-start / row-end / column-end; */
+      }
+
+      /* SPECIAL UNITS */
+
+      .container2 {
+        border: 1px solid rgb(4, 0, 255);
+        display: grid;
+        grid-template-columns: min-content max-content auto 1fr;
+      }
+
+      .container3 {
+        border: 1px solid rgb(4, 0, 255);
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      }
+
+      .container4 {
+        border: 1px solid rgb(4, 0, 255);
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-rows: 200px 200px 200px;
+        grid-template-areas:
+        "header header header header"
+        "aside main main main"
+        "footer footer footer footer"
+      
+      }
+
+      /* @media screen and (max-width: 600px) {
+        .container4 {
+
+          grid-template-columns: 1fr;
+          grid-template-rows: 100px 100px 25hv 100px;
+          grid-template-areas:
+          "header"
+          "aside"
+          "main"
+          "footer"
+        }
+      } */
+
+      .header {
+        grid-area: header;
+      }
+      .navigation {
+        grid-area: aside;
+      }
+      .main {
+        grid-area: main;
+      }
+      .footer {
+        grid-area: footer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>Grid basics</h2>
+    <div class="container">
+      <div class="item item1">navi</div>
+      <div class="item item2">2</div>
+      <div class="item item3">3</div>
+      <div class="item item4">4</div>
+      <div class="item item5">main</div>
+      <div class="item item6">6</div>
+      <!--
+      <div class="item item7">7</div>
+      <div class="item item7">8</div>
+      <div class="item item7">9</div>
+      <div class="item item7">10</div>
+      <div class="item item7">11</div>
+      <div class="item item7">12</div>
+      -->
+    </div>
+
+    <h2>Special units</h2>
+
+    <div class="container2">
+      <div class="item">Lorem ipsum moi</div>
+      <div class="item">Lorem ipsum moi</div>
+      <div class="item">Lorem ipsum moi</div>
+      <div class="item">Lorem ipsum moi</div>
+    </div>
+
+    <h2>Repeat function and keywords</h2>
+
+    <div class="container3">
+      <div class="item">1</div>
+      <div class="item">2</div>
+      <div class="item">3</div>
+      <div class="item">4</div>
+    </div>
+
+    <h2>Grid area names</h2>
+
+    <div class="container4">
+      <div class="item header">Header</div>
+      <div class="item navigation">Nav</div>
+      <div class="item main">Main</div>
+      <div class="item footer">Footer</div>
+    </div>
+  </body>
+</html>
