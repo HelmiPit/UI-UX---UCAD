@@ -57,7 +57,7 @@
         clear: both;
       }
 
-      /* Taustalla lipuva ja salamoiiva ukkospilvi (170x280px, 2 ruutua päällekkäin) */
+      /* Taustalla oleva ukkospilvi (170x280px, 2 ruutua päällekkäin) */
       .cloud {
         position: absolute;
         top: 4%;
@@ -90,7 +90,7 @@
         }
       }
 
-      /* Pelin tulosilmoitus keskellä ruutua */
+      /* Pelin tulosilmoitus keskellä ruutua (Victory / Game Over) */
       .status-banner {
         position: absolute;
         top: 38%;
@@ -140,7 +140,7 @@
         animation-iteration-count: 10; */
       }
 
-      /* Koiran vaiheet: kävely -> haistelu -> hyppy */
+      /* Koiran animaation eri vaiheet */
       .dog-animate {
         animation:
           dogwalk 0.5s steps(5) 6,
@@ -256,7 +256,7 @@
         }
       }
 
-      /* Osumareaktio: pieni nykäisy ylös, heilunta puolelta toiselle ja katoaminen */
+      /* Ankkaan osutaan + reaktio */
       @keyframes fall {
         0% {
           transform: translate(0, 0) rotate(0deg);
@@ -280,12 +280,12 @@
         }
       }
 
-      /* Tätä luokkaa voi testata selaimen konsolista. */
+      /* Tätä luokkaa voi testata selaimen konsolista */
       .paused {
         animation-play-state: paused;
       }
 
-      /* Responsiivinen skaalaus kapeille näytöille */
+      /* Responsiivisuus pienille näytöille */
       @media (max-width: 600px) {
         .dog {
           transform-origin: bottom left;
@@ -332,14 +332,14 @@
       const output = document.querySelector("#output");
       const statusBanner = document.querySelector("#status");
 
-      // 1. Apufunktio: lisätään viesti tapahtumalokiin.
+      // 1. Apufunktio: lisätään viesti tapahtumalokiin
       function addLog(message) {
         const li = document.createElement("li");
         li.textContent = message;
         output.prepend(li);
       }
 
-      // Näyttää Victory / Game Over -tekstin ja käynnistää pelin alusta
+      // Näyttää Victory / Game Over -tekstin ja käynnistää pelin alusta sen loputtua
       function endRound(isVictory) {
         if (isVictory) {
           statusBanner.textContent = "VICTORY!";
@@ -357,12 +357,12 @@
         statusBanner.className = "status-banner";
         statusBanner.textContent = "";
 
-        // Nollataan ankka
+        // Ankka nollautuu
         duck.classList.remove("duckfly", "duckfall");
         duck.style.left = "";
         duck.style.top = "";
 
-        // Palautetaan koira näkyviin ja nollataan sen animaatio
+        // Palautetaan koira näkyviin ja animaatio nollautuu
         dog.style.display = "block";
         dog.classList.remove("dog-animate");
         void dog.offsetWidth;
@@ -371,7 +371,7 @@
         addLog("Uusi kierros alkaa!");
       }
 
-      // 2. Seurataan koiran animaatioiden alkua, toistoja ja loppua.
+      // 2. Seurataan koiran animaatioiden alkua, toistoja ja loppua
       const animationEvents = [
         "animationstart",
         "animationiteration",
@@ -385,8 +385,8 @@
               `(${event.elapsedTime.toFixed(1)} s)`,
           );
 
-          // HUOM: animationend laukeaa jokaisesta päättyvästä animaatiosta.
-          // Käynnistetään ankka vasta koko hyppysarjan päätyttyä.
+          // HUOM: animationend laukeaa jokaisesta päättyvästä animaatiosta
+          // Käynnistetään ankka vasta koko hyppysarjan päätyttyä
           if (
             event.type === "animationend" &&
             event.animationName === "dogjump"
@@ -400,8 +400,7 @@
         });
       });
 
-      // Osuma: jäädytetään ankan tämänhetkinen sijainti ennen
-      // lentämisluokan poistamista ja putoamisanimaation aloittamista.
+      // Osuma: jäädytetään ankan tämänhetkinen sijainti ennen lentämisluokan poistamista ja putoamisanimaation aloittamista.
       duck.addEventListener("click", () => {
         if (!duck.classList.contains("duckfly")) return;
 
@@ -417,7 +416,7 @@
         addLog("Osuma! Ankka putoaa.");
       });
 
-      // Jos lentoreitti päättyy, ankka on karannut.
+      // Jos lentoreitti päättyy, ankka on karannut
       duck.addEventListener("animationend", (event) => {
         if (event.animationName === "fly") {
           duck.classList.remove("duckfly");
