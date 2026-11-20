@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Duck Hunt – CSS animations</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      /* 1. Sivun perusmuotoilu */
+      body {
+        min-height: 100vh;
+        margin: 0;
+        padding: 16px;
+        font-family: "Press Start 2P", cursive;
+        line-height: 1.7;
+      }
+
+      main {
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      h1 {
+        font-size: clamp(1.2rem, 4vw, 2rem);
+      }
+
+      p {
+        font-size: clamp(0.75rem, 2.2vw, 0.95rem);
+      }
+
+      .dh {
+        width: clamp(110px, 25vw, 200px);
+        padding: 10px;
+        float: left;
+      }
+
+      /* 2. Pelialue: absolute-elementit sijoitetaan tämän sisään */
+      .stage {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 800 / 481;
+        background: url("img2/stage.png") center / cover no-repeat;
+        overflow: hidden; /* Karkaava ankka ei näy alueen ulkopuolella */
+        cursor: crosshair;
+        clear: both;
+      }
+
+      /* Taustalla lipuva ja salamoiiva ukkospilvi (170x280px, 2 ruutua päällekkäin) */
+      .cloud {
+        position: absolute;
+        top: 4%;
+        left: -180px;
+        width: 170px;
+        height: 140px;
+        background: url("img2/cloud-sprite.png") no-repeat 0 0;
+        z-index: 1;
+        pointer-events: none;
+        animation:
+          cloudflash 1.2s steps(2) infinite,
+          cloudmove 18s linear infinite;
+      }
+
+      @keyframes cloudflash {
+        from {
+          background-position: 0 0;
+        }
+        to {
+          background-position: 0 -280px;
+        }
+      }
+
+      @keyframes cloudmove {
+        from {
+          left: -180px;
+        }
+        to {
+          left: 105%;
+        }
+      }
+
+      /* Pelin tulosilmoitus keskellä ruutua */
+      .status-banner {
+        position: absolute;
+        top: 38%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: clamp(1.3rem, 5vw, 2.5rem);
+        color: #fff;
+        text-shadow: 4px 4px 0 #000;
+        z-index: 10;
+        pointer-events: none;
+        display: none;
+        text-align: center;
+      }
+
+      .status-banner.victory {
+        display: block;
+        color: #7fff00;
+      }
+
+      .status-banner.gameover {
+        display: block;
+        color: #ff4444;
+      }
+
+      #output {
+        margin-top: 24px;
+        padding-left: 20px;
+        font-family: monospace;
+        font-size: 14px;
+        line-height: 1.5;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+
+      .dog {
+        position: absolute;
+        left: 4%;
+        bottom: 6%;
+        width: 120px;
+        height: 120px;
+        background-image: url("img2/sprite.png");
+        background-position: 0 0;
+        z-index: 3;
+        /* animation-name: dogwalk;
+        animation-duration: 0.75s;
+        animation-timing-function: steps(5);
+        animation-iteration-count: 10; */
+      }
+
+      /* Koiran vaiheet: kävely -> haistelu -> hyppy */
+      .dog-animate {
+        animation:
+          dogwalk 0.5s steps(5) 6,
+          dogmove 3s linear forwards,
+          dogsniff 0.5s 3s steps(2) 2,
+          dogjump 0.8s 4s steps(2) forwards,
+          doghop 0.8s 4s ease-in-out forwards;
+      }
+
+      @keyframes dogwalk {
+        from {
+          background-position: 0 0;
+        }
+        to {
+          background-position: -600px 0;
+        }
+      }
+
+      @keyframes dogmove {
+        from {
+          left: 4%;
+        }
+        to {
+          left: 38%;
+        }
+      }
+
+      @keyframes dogsniff {
+        from {
+          background-position: -360px 0;
+        }
+        to {
+          background-position: -600px 0;
+        }
+      }
+
+      @keyframes dogjump {
+        from {
+          background-position: -120px -110px;
+        }
+        to {
+          background-position: -360px -110px;
+        }
+      }
+
+      @keyframes doghop {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-100px);
+        }
+        100% {
+          transform: translateY(-50px);
+        }
+      }
+
+      /* Ankka odottaa piilossa koiran animaation ajan */
+      .duck {
+        position: absolute;
+        top: 10%;
+        left: 6%;
+        width: 80px;
+        height: 80px;
+        background-image: url("img2/sprite.png");
+        background-position: 0 -220px;
+        visibility: hidden;
+        z-index: 2;
+      }
+
+      .duckfly {
+        visibility: visible;
+        animation:
+          flap 600ms steps(3) infinite,
+          fly 5s linear forwards;
+      }
+
+      .duckfall {
+        visibility: visible;
+        pointer-events: none;
+        animation: fall 1.5s ease-in forwards;
+      }
+
+      @keyframes flap {
+        from {
+          background-position: 0 -220px;
+        }
+        to {
+          background-position: -240px -220px;
+        }
+      }
+
+      @keyframes fly {
+        0% {
+          left: 6%;
+          top: 15%;
+        }
+        25% {
+          left: 25%;
+          top: 25%;
+        }
+        50% {
+          left: 35%;
+          top: 60%;
+        }
+        75% {
+          left: 68%;
+          top: 40%;
+        }
+        100% {
+          left: 105%;
+          top: 20%;
+        }
+      }
+
+      /* Osumareaktio: pieni nykäisy ylös, heilunta puolelta toiselle ja katoaminen */
+      @keyframes fall {
+        0% {
+          transform: translate(0, 0) rotate(0deg);
+          opacity: 1;
+        }
+        20% {
+          transform: translate(-20px, -15px) rotate(-25deg);
+          opacity: 1;
+        }
+        45% {
+          transform: translate(20px, 30px) rotate(25deg);
+          opacity: 1;
+        }
+        70% {
+          transform: translate(-15px, 90px) rotate(-20deg);
+          opacity: 0.8;
+        }
+        100% {
+          transform: translate(10px, 180px) rotate(45deg);
+          opacity: 0;
+        }
+      }
+
+      /* Tätä luokkaa voi testata selaimen konsolista. */
+      .paused {
+        animation-play-state: paused;
+      }
+
+      /* Responsiivinen skaalaus kapeille näytöille */
+      @media (max-width: 600px) {
+        .dog {
+          transform-origin: bottom left;
+          scale: 0.7;
+        }
+        .duck {
+          scale: 0.75;
+        }
+        .cloud {
+          transform-origin: top left;
+          scale: 0.65;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <h1>Duckhunt Stage</h1>
+
+      <p>
+        <img class="dh" src="img2/duckhunt.png" alt="" />
+        Duck Hunt is a fantastic arcade game that takes inspiration from the
+        original classic available on Nintendo game systems. You must shoot the
+        moving ducks down with your mouse and see how many points you can score.
+        Be sure to avoid shooting your faithful dog!
+      </p>
+
+      <div class="stage">
+        <div class="cloud"></div>
+        <div id="status" class="status-banner"></div>
+        <div class="dog dog-animate"></div>
+        <div class="duck"></div>
+      </div>
+
+      <h2>Animation events</h2>
+      <ul id="output"></ul>
+    </main>
+
+    <script>
+      const dog = document.querySelector(".dog");
+      const duck = document.querySelector(".duck");
+      const stage = document.querySelector(".stage");
+      const output = document.querySelector("#output");
+      const statusBanner = document.querySelector("#status");
+
+      // 1. Apufunktio: lisätään viesti tapahtumalokiin.
+      function addLog(message) {
+        const li = document.createElement("li");
+        li.textContent = message;
+        output.prepend(li);
+      }
+
+      // Näyttää Victory / Game Over -tekstin ja käynnistää pelin alusta
+      function endRound(isVictory) {
+        if (isVictory) {
+          statusBanner.textContent = "VICTORY!";
+          statusBanner.className = "status-banner victory";
+        } else {
+          statusBanner.textContent = "GAME OVER";
+          statusBanner.className = "status-banner gameover";
+        }
+
+        // Odotetaan 2 sekuntia ja aloitetaan uusi kierros alusta
+        setTimeout(restartGame, 2000);
+      }
+
+      function restartGame() {
+        statusBanner.className = "status-banner";
+        statusBanner.textContent = "";
+
+        // Nollataan ankka
+        duck.classList.remove("duckfly", "duckfall");
+        duck.style.left = "";
+        duck.style.top = "";
+
+        // Palautetaan koira näkyviin ja nollataan sen animaatio
+        dog.style.display = "block";
+        dog.classList.remove("dog-animate");
+        void dog.offsetWidth;
+        dog.classList.add("dog-animate");
+
+        addLog("--- Uusi kierros alkaa! ---");
+      }
+
+      // 2. Seurataan koiran animaatioiden alkua, toistoja ja loppua.
+      const animationEvents = [
+        "animationstart",
+        "animationiteration",
+        "animationend",
+      ];
+
+      animationEvents.forEach((eventType) => {
+        dog.addEventListener(eventType, (event) => {
+          addLog(
+            `${event.animationName}: ${event.type} ` +
+              `(${event.elapsedTime.toFixed(1)} s)`,
+          );
+
+          // HUOM: animationend laukeaa jokaisesta päättyvästä animaatiosta.
+          // Käynnistetään ankka vasta koko hyppysarjan päätyttyä.
+          if (
+            event.type === "animationend" &&
+            event.animationName === "dogjump"
+          ) {
+            // KOTIIN: PIILOTA KOIRA
+            // KUN KLIKATAAN ANKKAA, ANKKA PYSÄHTYY JA PUTOAMISANIMAATIO ALKAA TAI PISTEITÄ TULEE
+            dog.style.display = "none";
+            duck.classList.add("duckfly");
+            addLog("Ankka lähti lentoon!");
+          }
+        });
+      });
+
+      // Osuma: jäädytetään ankan tämänhetkinen sijainti ennen
+      // lentämisluokan poistamista ja putoamisanimaation aloittamista.
+      duck.addEventListener("click", () => {
+        if (!duck.classList.contains("duckfly")) return;
+
+        // Tallennetaan nykyinen sijainti pelialueen sisällä
+        const currentX = duck.offsetLeft;
+        const currentY = duck.offsetTop;
+
+        duck.style.left = `${currentX}px`;
+        duck.style.top = `${currentY}px`;
+
+        duck.classList.remove("duckfly");
+        duck.classList.add("duckfall");
+        addLog("Osuma! Ankka putoaa.");
+      });
+
+      // Jos lentoreitti päättyy, ankka on karannut.
+      duck.addEventListener("animationend", (event) => {
+        if (event.animationName === "fly") {
+          duck.classList.remove("duckfly");
+          addLog("Ankka karkasi!");
+          endRound(false);
+        }
+
+        if (event.animationName === "fall") {
+          addLog("Victory!");
+          endRound(true);
+        }
+      });
+
+      // Testaa konsolissa:
+      // duck.classList.add('paused');    // keskeytä
+      // duck.classList.remove('paused'); // jatka
+    </script>
+  </body>
+</html>
