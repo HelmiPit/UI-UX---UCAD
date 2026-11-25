@@ -4,11 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CSS 3D ja Three.js - demo</title>
+
     <script type="importmap">
       {
         "imports": {
-          "three": "https://jsdelivr.net",
-          "three/addons/": "https://jsdelivr.net"
+          "three": "https://cdn.jsdelivr.net/npm/three/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three/examples/jsm/"
         }
       }
     </script>
@@ -34,7 +35,7 @@
         height: 200px;
         border: 1px solid black;
         margin: 50px auto;
-        /* perspektiivi määritellään aina vanhemmalle elementille */
+        /* perspektiivi määritellään aina vanhemmalle */
         perspective: 600px;
         /* perspective-origin: right center; */
       }
@@ -46,8 +47,10 @@
         /* tänne rotaatiot ym transitiot */
         /* transform: translateZ(100px) rotateY(60deg); */
         transform: rotateY(60deg);
-        /* default: */
-        /* transform-origin: left center; */
+        /* default */
+        /* transform-origin: center center; */
+        transform-origin: left center;
+
         /* Miten taso näkyy takaa */
         /* backface-visibility: hidden; */
       }
@@ -57,7 +60,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        color: cyan;
+        color: aliceblue;
         font-size: xx-large;
       }
     </style>
@@ -99,10 +102,10 @@
         color: inherit;
         cursor: pointer;
         font: inherit;
-        transition: transform 1s ease-in-out;
 
+        transition: transform 1s ease-in-out;
         /* Lapsielementit pysyy keskenään 3D tilassa */
-        /* ns. omat transformaatiot toimivat 3D-tilassa */
+        /* ns omat transformaatiot toimivat */
         transform-style: preserve-3d;
       }
 
@@ -115,9 +118,9 @@
       .flipped {
         transform: rotateY(180deg);
       }
-
-      .card:hover {
-      }
+      /* .card:hover {
+        transform: rotateY(180deg);
+      } */
       .card-front,
       .card-back {
         position: absolute;
@@ -127,6 +130,8 @@
         left: 0; */
         inset: 0;
 
+        /* Piilotetaan tahkon nurja puoli */
+        backface-visibility: hidden;
       }
 
       .card-front {
@@ -134,7 +139,8 @@
       }
 
       .card-back {
-        background-color: lightblue;
+        background-color: blue;
+        /* Takapuoli käännetään valmiiksi ympäri */
         transform: rotateY(180deg);
       }
     </style>
@@ -178,23 +184,23 @@
         width: 200px;
         height: 200px;
         position: relative;
+
+        /* Lapsielementit pysyy keskenään 3D tilassa */
+        /* ns omat transformaatiot toimivat */
         transform-style: preserve-3d;
-        transform: rotateY(30deg) rotateX(30deg);
+        animation: rotateCube 20s linear infinite;
       }
 
       @keyframes rotateCube {
         0% {
+          transform: rotateY(10deg) rotateX(0deg);
         }
         100% {
+          transform: rotateY(360deg) rotateX(360deg);
         }
       }
 
       .kuutio-tahko {
-      }
-
-      /* Muunnosten järjestys on tärkeä: rotate + translateZ. */
-      .kuutio-etu {
-        background-color: lightpink;
         width: 200px;
         height: 200px;
         position: absolute;
@@ -205,23 +211,32 @@
         color: aliceblue;
         font-size: xx-large;
       }
+
+      /* Muunnosten järjestys on tärkeä: rotate + translateZ. */
+      .kuutio-etu {
+        background-color: rgba(0, 0, 255, 0.78);
+        transform: rotateY(0deg) translateZ(100px);
+      }
       .kuutio-taka {
-        background-color: lightblue;
+        background-color: rgba(0, 255, 255, 0.762);
+        transform: rotateY(180deg) translateZ(100px);
       }
       .kuutio-oikea {
-        background-color: lightgreen;
+        background-color: rgba(137, 43, 226, 0.827);
+        transform: rotateY(90deg) translateZ(100px);
       }
       .kuutio-vasen {
-        background-color: lightcoral;
-        transform: translateZ(-100px) rotateY(90deg);
+        background-color: rgba(128, 255, 0, 0.728);
+        transform: rotateY(-90deg) translateZ(100px);
       }
       .kuutio-yla {
-        background-color: lightgoldenrodyellow;
+        background-color: rgba(210, 105, 30, 0.794);
+        transform: rotateX(90deg) translateZ(100px);
       }
       .kuutio-ala {
-        background-color: lightgray;
+        background-color: rgba(223, 14, 163, 0.763);
+        transform: rotateX(-90deg) translateZ(100px);
       }
-
     </style>
 
     <!-- .maailma3d vastaa aiempaa .scene-elementtiä: kamera/perspektiivi. -->
@@ -292,10 +307,33 @@
       </p>
       <p>
         Eos beatae a dolorem nemo, molestias in perspiciatis distinctio cumque
-        inventore. Error quam exercitationem accusamus iusto id eius.
+        inventore. Error quam exercitationem accusamus iusto id eius,
+        reprehenderit rerum odio aperiam cupiditate itaque cumque facilis modi
+        veritatis quos nisi nam molestiae dolores placeat et dolorum. Aperiam
+        quia et quis ab! Lorem ipsum dolor sit amet, consectetur adipisicing
+        elit. Cupiditate ipsum veniam, suscipit sint quis at assumenda ea
+        molestiae earum. Eos beatae a dolorem nemo, molestias in perspiciatis
+        distinctio cumque inventore. Cupiditate ipsum veniam, suscipit sint quis
+        at assumenda ea molestiae earum. Eos beatae a dolorem nemo, molestias in
+        perspiciatis distinctio cumque inventore. Error quam exercitationem
+        accusamus iusto id eius, reprehenderit rerum odio aperiam cupiditate
+        itaque cumque facilis modi veritatis quos nisi nam molestiae dolores
+        placeat et dolorum. Aperiam quia et quis ab! Lorem ipsum dolor sit amet,
+        consectetur adipisicing elit. Cupiditate ipsum veniam, suscipit sint
+        quis at assumenda ea molestiae earum. Eos beatae a dolorem nemo,
+        molestias in perspiciatis distinctio cumque inventore.
       </p>
     </div>
 
-    <script type="module" src="three-cube.js"></script>
+    <script>
+      // Kortin click-tapahtuma: JS vain vaihtaa CSS-luokan.
+      const card = document.querySelector(".card");
+      card.addEventListener("click", () => {
+        const isFlipped = card.classList.toggle("flipped");
+        console.log(isFlipped);
+        card.setAttribute("aria-pressed", String(isFlipped));
+      });
+    </script>
+    <script type="module" src="js/three-cube.js"></script>
   </body>
 </html>
